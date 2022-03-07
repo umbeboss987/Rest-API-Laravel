@@ -24,7 +24,7 @@ class Order extends Migration
         });
 
         Schema::table('order', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('address_id')->references('id')->on('address');       
         });
     }

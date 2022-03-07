@@ -3,8 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    //
+    public function login(Request $req){
+       $login =  $req->validate([
+            'username' => 'required|string',
+            'password' => 'required|string'
+       ]);
+        if(!Auth::attempt($login)){
+            return response(['message' => 'Invalid credentials']);
+        }
+        $accessToken = Auth::user()->createToken('authToken')->accessToken;
+
+        return response(['user'=> Auth::user(), 'accessToken'=>$accessToken],200);
+    }
+
+    public function register(Request $req)
+    {
+        $req->validate([
+                'username' => 'required|min:2',
+                'email' => 'required|email',
+                'password' => 'required|min:4',
+                'role_id' => 'required',
+        ]);
+
+        if (!User::where('username', $req->username)->first()){
+            $user = new User();
+            $user->email = $req->email;
+            $user->username = $req->username;
+            $user->password = $req->password;
+            $user->role_id = $req->role_id;
+            $user->save();
+            return response()->json(['message' => "User Created"], 201);
+        }else{
+            return response()->json(['error' => 'Username is already registered.'], 409);
+        }
+    }
 }

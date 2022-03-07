@@ -13,7 +13,7 @@ class User extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';	
             $table->bigIncrements('id');
             $table->bigInteger('role_id')->unsigned();

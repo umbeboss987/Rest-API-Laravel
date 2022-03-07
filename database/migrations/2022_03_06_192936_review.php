@@ -17,7 +17,7 @@ class Review extends Migration
                 $table->engine = 'InnoDB';	
                 $table->id();
                 $table->bigInteger('user_id')->unsigned();
-                $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
                 $table->bigInteger('product_id')->unsigned();
                 $table->foreign('product_id')->references('id')->on('product')->onDelete('cascade');
                 $table->text('review');

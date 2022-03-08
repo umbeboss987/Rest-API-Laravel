@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +29,30 @@ Route::prefix('rest')->group(function(){
     Route::get('/products',[ProductController::class, 'getProducts']);
     Route::get('/products/{product_id}',[ProductController::class ,'getProductById'])->name('getProductById')->where(['product_id' => '[0-9]+']);
     Route::get('/products',[ProductController::class, 'getProductsByType']);
+    Route::get('products/reviews', [ReviewController::class, 'getReviews']);
     Route::get('/products/{productId}/reviews',[ProductController::class, 'getProductReviews']);
+
+    Route::group(['middleware' => ['auth:api']], function(){
+        Route::get('user', [UserController::class, 'getUser']); 
+        Route::patch('user', [UserController::class, 'updateUser']);
+        Route::post('products/{product_id}/reviews',[ReviewController::class, 'addReview']);   
+        Route::post('/address', [AddressController::class, 'addAddress']);
+        Route::get('/address', [AddressController::class, 'getUserAddress'])->name('getUserAddress');  
+        Route::get('/orders', [OrderController::class, 'orderList']);
+        Route::post('/orders',[OrderController::class, 'addOrder']);
+        Route::get ('/address/{address_id}', [AddressController::class, 'getAddressById'])->name('getAddressById');
+    });
+
+    Route::group(['middleware' => 'Admin'], function (){
+        Route::delete('products/{product_id}', [ProductController::class, 'deleteProductById'])->name('deleteProductById');
+        Route::post('products', [ProductController::class, 'addProduct'])->name('addProduct');
+        Route::post('products/{product_id}',[ProductController::class, 'updateProduct'])->name('updateProduct');
+        Route::delete('products/{product_id}/reviews/{review_id}',[ProductController::class, 'deleteProductReview'])->name('deleteProductReview');
+        
+        Route::get('users', [UserController::class, 'getAllUsers']);
+        Route::delete('users/{user_id}', [UserController::class, 'deleteUser']);
+
+        Route::get('', [OrderController::class, 'getOrders']);
+        Route::delete('/{order_id}', [OrderController::class, 'deleteOrderById']);
+    });
 });

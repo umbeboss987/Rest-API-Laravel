@@ -42,4 +42,29 @@ class UserController extends Controller
             return response()->json(['error' => 'Username is already registered.'], 409);
         }
     }
+
+    function updateUser (Request $req) {
+        $user_id = auth()->user()->id;
+        User::where('id',$user_id)->update([
+            'email' => $req->email,
+            'username' => $req->username
+        ]);
+        return response(null, 204);
+    }
+
+    function getUser(){
+        $user = auth()->user();
+        return response()->json($user);
+    }
+
+
+    function getAllUsers(){
+        $users = User::all();
+        return response()->json($users);
+     }
+ 
+     function deleteUser ($user_id){
+        $user = DB::table('user')->delete($user_id); 
+        return response()->json($user);       
+     } 
 }

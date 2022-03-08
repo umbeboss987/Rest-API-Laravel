@@ -24,5 +24,7 @@ Route::prefix('rest')->group(function(){
     Route::post('/login',[UserController::class, 'login']);
     Route::post('/signUp',[UserController::class, 'register']);
     Route::get('/products',[ProductController::class, 'getProducts']);
+    Route::get('/products/{product_id}',[ProductController::class ,'getProductById'])->name('getProductById')->where(['product_id' => '[0-9]+']);
+    Route::get('/products',[ProductController::class, 'getProductsByType']);
     Route::get('/products/{productId}/reviews',[ProductController::class, 'getProductReviews']);
 });

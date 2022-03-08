@@ -38,9 +38,9 @@ class ProductController extends Controller
         }
     }
 
-    function getProductsByType($products_type)
+    function getProductsByType(Request $request)
     {
-       
+        $products_type = request('type'); 
         try {
             if ($products_type != 'phone' || $products_type != 'computer' || $products_type != 'tablet'){
 
@@ -96,19 +96,26 @@ class ProductController extends Controller
 
 
     function addProduct(Request $req){
-        $product = new Product();
-        $product->name = $req->name;
-        $product->price = $req->price;
-        $product->description = $req->description;
-        $product->type = $req->type;
-        $product->photo = $req->photo;
-        $product->save();
-        return response(null, 201)->header('location', 'http://localhost:8000/api/products/' . $product->id);
+        if (!isset($req->name) || !isset($req->price) || !isset($req->description) ||!isset($req->type) || !isset($req->photo)) {
+            return response()->json(null, 422);
+        }else{
+            $product = new Product();
+            $product->name = $req->name;
+            $product->price = $req->price;
+            $product->description = $req->description;
+            $product->type = $req->type;
+            $product->photo = $req->photo;
+            $product->save();
+            return response(null, 201)->header('location', 'http://localhost:8000/api/products/' . $product->id);
+        }
     }
 
 
     function getProductReviews($product_id) {
-        $reviews = Review::select('users.username', 'review.review', 'review.id')->join('users', 'review.user_id', 'users.id')->where('product_id', $product_id)->get();
+        $reviews = Review::select('users.username', 'review.review', 'review.id')
+        ->join('users', 'review.user_id', 'users.id')
+        ->where('product_id', $product_id)
+        ->get();
         if(empty($reviews)){
             return response()->json(null, 204);
         }

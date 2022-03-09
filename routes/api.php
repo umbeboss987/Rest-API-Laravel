@@ -37,6 +37,7 @@ Route::prefix('rest')->group(function(){
         Route::patch('user', [UserController::class, 'updateUser']);
         Route::post('products/{product_id}/reviews',[ReviewController::class, 'addReview']);   
         Route::post('/address', [AddressController::class, 'addAddress']);
+        Route::patch('/address/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
         Route::get('/address', [AddressController::class, 'getUserAddress'])->name('getUserAddress');  
         Route::get('/orders', [OrderController::class, 'orderList']);
         Route::post('/orders',[OrderController::class, 'addOrder']);

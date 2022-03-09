@@ -14,7 +14,7 @@ class UserController extends Controller
             'password' => 'required|string'
        ]);
         if(!Auth::attempt($login)){
-            return response(['message' => 'Invalid credentials']);
+            return response(['message' => 'Invalid credentials'], 401);
         }
         $accessToken = Auth::user()->createToken('authToken')->accessToken;
 
@@ -34,7 +34,7 @@ class UserController extends Controller
             $user = new User();
             $user->email = $req->email;
             $user->username = $req->username;
-            $user->password = $req->password;
+            $user->password = bcrypt($req->password);
             $user->role_id = $req->role_id;
             $user->save();
             return response()->json(['message' => "User Created"], 201);

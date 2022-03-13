@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('okok'),
             'image_id' => null,
             'email' => 'umberto.labarbera@student.univaq.it',
-            'role_id' => 1
+            'role' => "admin"
             ]
         );
 

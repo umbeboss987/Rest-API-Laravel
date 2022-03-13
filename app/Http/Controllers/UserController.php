@@ -27,7 +27,7 @@ class UserController extends Controller
                 'username' => 'required|min:2',
                 'email' => 'required|email',
                 'password' => 'required|min:4',
-                'role_id' => 'required',
+                'role' => 'required',
         ]);
 
         if (!User::where('username', $req->username)->first()){

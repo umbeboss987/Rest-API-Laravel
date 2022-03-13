@@ -16,8 +16,8 @@ class User extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';	
             $table->bigIncrements('id');
-            $table->bigInteger('role_id')->unsigned();
-            $table->foreign('role_id')->references('id')->on('role');
+            $table->string('role');
+           // $table->foreign('role_id')->references('id')->on('role');
             $table->string('username')->unique();
             $table->string('password');
             $table->text('email');

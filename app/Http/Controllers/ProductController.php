@@ -12,7 +12,7 @@ class ProductController extends Controller
     function getProducts (){
         $data= Product::all();
           if(empty($data)){
-             return response()->json(['message' => 'data not found'], 404);
+             return response()->json(['products' => []], 200);
            }
             $allProducts = [];
             foreach($data as $product){
@@ -43,11 +43,11 @@ class ProductController extends Controller
         $products_type = request('type'); 
         try {
             if ($products_type != 'phone' || $products_type != 'computer' || $products_type != 'tablet'){
-
+                return response()->json(['message' => 'malformed query parameter'], 400);
             }
             $data = Product::where('type', $products_type)->get();
             if (empty($data) || is_null($data)) {
-                return response()->json(['message' => 'data not found'], 404);
+                return response()->json(['products' => []], 200);
             } else {
                 return response()->json($data, 200);
             }
@@ -73,9 +73,7 @@ class ProductController extends Controller
     function updateProduct($product_id, Request $req)
     {
         try {
-            if (empty($product_id) || is_null($product_id)) {
-                return response(null,500);
-            } 
+
             if(!Product::where('id', $product_id)->exists()) {
                 return response('Product not found', 404);
             }

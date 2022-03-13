@@ -9,6 +9,16 @@ class AddressController extends Controller
 {
     function addAddress (Request $req ){
         $user_id = auth()->user()->id;
+       
+        $req->validate([
+          'address' => 'required|min:2',
+          'telephone_number' => 'required',
+          'surname' => 'required|min:2',
+          'postal_code' => 'required',
+          'city' => 'required|min:2',
+          'name' => 'required|min:2'
+        ]);
+
         $address = new Address();
         $address->user_id = $user_id;
         $address->address = $req->input('address');
@@ -18,7 +28,7 @@ class AddressController extends Controller
         $address->postal_code = $req->input('postal_code');
         $address->city = $req->input('city');
         $address->save();
-        return response(null, 201);
+        return response(null, 201)->header('location', 'http://localhost:8000/api/rest/address/'. $address->id);
     }
 
 

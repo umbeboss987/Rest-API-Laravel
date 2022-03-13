@@ -8,10 +8,10 @@ class OrderController extends Controller
 {
     function addOrder(Request $req)
     {
-        $user = JWTAuth::user()->id;
+        $user = auth()->user()->id;
         $carts = Cart::where('user_id', $user)->get();
         if (empty($carts) || $carts == null) {
-            return response()->json(['message' => 'your cart is empty'], 500);
+            return response()->json(['message' => 'your cart is empty'], 400);
         } else {
             $order = new Order();
             $order->user_id = $user;

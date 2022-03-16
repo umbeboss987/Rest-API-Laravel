@@ -35,7 +35,7 @@ class UserController extends Controller
             $user->email = $req->email;
             $user->username = $req->username;
             $user->password = bcrypt($req->password);
-            $user->role_id = $req->role_id;
+            $user->role = $req->role;
             $user->save();
             return response()->json(['message' => "User Created"], 201);
         }else{

@@ -26,9 +26,9 @@ use App\Http\Controllers\OrderController;
 Route::prefix('rest')->group(function(){
     Route::post('/login',[UserController::class, 'login']);
     Route::post('/signUp',[UserController::class, 'register']);
-    Route::get('/products',[ProductController::class, 'getProducts']);
+    Route::get('/products',[ProductController::class, 'getProducts'])->name('getProducts');
     Route::get('/products/{product_id}',[ProductController::class ,'getProductById'])->name('getProductById')->where(['product_id' => '[0-9]+']);
-    Route::get('/products',[ProductController::class, 'getProductsByType']);
+    //Route::get('/products',[ProductController::class, 'getProductsByType']);
     Route::get('products/reviews', [ReviewController::class, 'getReviews']);
     Route::get('/products/{productId}/reviews',[ProductController::class, 'getProductReviews']);
 
@@ -44,7 +44,7 @@ Route::prefix('rest')->group(function(){
         Route::get ('/address/{address_id}', [AddressController::class, 'getAddressById'])->name('getAddressById');
     });
 
-    Route::group(['middleware' => 'Admin'], function (){
+    Route::group(['middleware' => ['admin']], function (){
         Route::delete('products/{product_id}', [ProductController::class, 'deleteProductById'])->name('deleteProductById');
         Route::post('products', [ProductController::class, 'addProduct'])->name('addProduct');
         Route::post('products/{product_id}',[ProductController::class, 'updateProduct'])->name('updateProduct');

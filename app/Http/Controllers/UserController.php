@@ -53,7 +53,7 @@ class UserController extends Controller
     }
 
     function getUser(){
-        $user = auth()->user();
+        $user = Auth::user();
         return response()->json($user);
     }
 
@@ -64,7 +64,7 @@ class UserController extends Controller
      }
  
      function deleteUser ($user_id){
-        $user = DB::table('user')->delete($user_id); 
-        return response()->json($user);       
+        $user = User::where('id', $user_id)->delete(); 
+        return response()->json(null, 204);       
      } 
 }

@@ -19,7 +19,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->guard('api')->user()->role == "admin"){
+        if (Auth::guard('api')->check() && auth()->guard('api')->user()->role == "admin"){
             return $next($request);
         }else{
             return response()->json(null, 401);

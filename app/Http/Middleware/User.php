@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class User
 {
@@ -16,7 +17,7 @@ class User
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 'user'){
+        if (Auth::guard('api')->check()){
             return $next($request);
         }else{
             return response()->json(null, 401);

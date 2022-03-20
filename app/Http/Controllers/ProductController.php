@@ -59,10 +59,11 @@ class ProductController extends Controller
     function deleteProductById($product_id)
     {
         try {
-            if (empty($product_id) || is_null($product_id)) {
-                return response()->json([], 404);
+            $data = Product::find($product_id);
+            if (!$data) {
+                return response()->json(null, 404);
             } else {
-                $data = Product::find($product_id)->delete();
+                $data->delete();
                 return response(null, 204);
             }
         } catch (Exception $e) {
@@ -72,29 +73,32 @@ class ProductController extends Controller
 
     function updateProduct($product_id, Request $req)
     {
+        $input = $req->all();
         try {
-
-            if(!Product::where('id', $product_id)->exists()) {
+            $product = Product::find($product_id);
+            if(!$product) {
                 return response('Product not found', 404);
             }
             else {
-                Product::where('id', $product_id)->update([
-                    'name' => $req->name,
-                    'price' => $req->price,
-                    'description' => $req->description,
-                    'type' => $req->type,
-                    'photo' => $req->photo,
-                ]);
+                if (isset($input['name'])) $product->name = $input['name'];
+                if (isset($input['price'])) $product->price = $input['price'];
+                if (isset($input['description'])) $product->description = $input['description'];
+                if (isset($input['type'])) $product->type = $input['type'];
+                if (isset($input['photo'])) $product->photo = $input['photo'];
+                $product->save();
                 return response()->noContent();
             }
         } catch (Exception $e) {
             return response(null,500);
         }
-    }
+     }
 
 
     function addProduct(Request $req){
-        if (!isset($req->name) || !isset($req->price) || !isset($req->description) ||!isset($req->type) || !isset($req->photo)) {
+        if (!isset($req->name) || !isset($req->price) || 
+            !isset($req->description) ||
+            !isset($req->type) || 
+            !isset($req->photo)) {
             return response()->json(null, 422);
         }else{
             $product = new Product();

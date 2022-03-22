@@ -18,7 +18,11 @@ class UserController extends Controller
         }
         $accessToken = Auth::user()->createToken('authToken')->accessToken;
 
-        return response(['user'=> Auth::user(), 'accessToken'=>$accessToken],200);
+        $user =  Auth::user();
+
+        unset($user['image_id'], $user['created_at'],  $user['updated_at']);
+
+        return response(['user'=> $user, 'accessToken'=>$accessToken],200);
     }
 
     public function register(Request $req)

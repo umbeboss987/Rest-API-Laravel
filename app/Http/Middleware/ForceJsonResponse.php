@@ -23,8 +23,8 @@ class ForceJsonResponse
 
         if (!$request->isMethod('post')) return $next($request);
 
-        $header = $request->header('Content-type');
-        if (!Str::contains($header, 'application/json')) {
+        $header_content = $request->header('Content-type');
+        if ($header_content != 'application/json') {
             return response(['message' => 'Only JSON requests are allowed'], 406);
         }
 

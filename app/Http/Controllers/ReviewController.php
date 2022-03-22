@@ -39,8 +39,7 @@ class ReviewController extends Controller
             $first_data['name'] = $review['product_name'];
             $first_data['id'] = $review['product_id'];       
             $review['product'] =  $first_data;  
-             unset($review['product_name'], $review['product_id']);                
-            
+             unset($review['product_name'], $review['product_id']);                        
         }
        
         return response()->json($reviews, 200);

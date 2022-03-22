@@ -17,7 +17,7 @@ class CartController extends Controller
         }
         $product = Product::select('price')->where('id', $req->product_id)->get();
         if(count($product) == 0){
-            return response()->json(["message" => "Product not found"], 404);
+            return response()->json(["message" => "Wrong product id"], 400);
         }else{
             $cart = new Cart();
             $user_id = auth()->user()->id;

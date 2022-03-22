@@ -18,10 +18,8 @@ class ProductController extends Controller
             foreach($data as $product){
                  $product["uri"] = "http://localhost:8080/products/". $product["id"];
                  array_push($allProducts,$product);
-            }
-           
+            }         
         return  response()->json(["products" => $allProducts],200);
-
     }
 
     function getProductById($product_id)
@@ -114,13 +112,15 @@ class ProductController extends Controller
 
 
     function getProductReviews($product_id) {
+        $product = Product::where('id', $product_id)->exists();
+        if(!$product_id){
+            return response()->json(null, 404);
+        }
         $reviews = Review::select('users.username', 'review.review', 'review.id')
         ->join('users', 'review.user_id', 'users.id')
         ->where('product_id', $product_id)
         ->get();
-        if(empty($reviews)){
-            return response()->json(null, 204);
-        }
+       
         return response()->json($reviews, 200);
     }
 

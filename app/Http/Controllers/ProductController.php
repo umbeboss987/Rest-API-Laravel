@@ -10,6 +10,14 @@ use App\Models\Review;
 class ProductController extends Controller
 {
     function getProducts (){
+
+        $products_type = request('type'); 
+    
+        if(isset($products_type)){
+            $filter_products = Product::where('type', $products_type)->get();
+            return response()->json($filter_products, 200);
+        }     
+
         $data= Product::all();
           if(empty($data)){
              return response()->json(['products' => []], 200);
@@ -113,8 +121,8 @@ class ProductController extends Controller
 
     function getProductReviews($product_id) {
         $product = Product::where('id', $product_id)->exists();
-        if(!$product_id){
-            return response()->json(null, 404);
+        if(!$product){
+            return response()->json(["message" => "Product does not exist"], 404);
         }
         $reviews = Review::select('users.username', 'review.review', 'review.id')
         ->join('users', 'review.user_id', 'users.id')
@@ -128,10 +136,10 @@ class ProductController extends Controller
 
         $review = Review::where('id', $review_id);
 
-        if($review){
+        if($review->exists()) {
             $review->delete();
             return response()->json(null, 204);
         }
-        return response(null, 204);
+        return response(['message' =>'review not found'], 404);
     }
 }

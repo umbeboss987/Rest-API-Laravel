@@ -51,7 +51,7 @@ class AddressController extends Controller
         $account->save();      
         return response()->noContent();
       }else{
-        return response()->noContent();
+        return response()->json(null,404);
 
       }
     }

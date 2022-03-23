@@ -18,14 +18,14 @@ class ForceJsonResponse
     {
         $header = $request->header('Accept');
         if ($header != 'application/json') {
-            return response(['message' => 'Only JSON requests are allowed'], 406);
+            return response(['message' => 'Only JSON requests are allowed'], 415);
         }
 
         if (!$request->isMethod('post')) return $next($request);
 
         $header_content = $request->header('Content-type');
         if ($header_content != 'application/json') {
-            return response(['message' => 'Only JSON requests are allowed'], 406);
+            return response(['message' => 'Only JSON requests are allowed'], 415);
         }
 
         return $next($request);

@@ -48,11 +48,13 @@ class UserController extends Controller
     }
 
     function updateUser (Request $req) {
+        $req_all = $req->all();
+        
         $user_id = auth()->user()->id;
-        User::where('id',$user_id)->update([
-            'email' => $req->email,
-            'username' => $req->username
-        ]);
+        $user =  User::find($user_id);
+        isset($req_all['email']) ? $user->email = $req_all['email'] : $user->email;
+        isset($req_all['username']) ? $user->username = $req_all['username'] : $user->username;
+        $user->save();
         return response(null, 204);
     }
 
@@ -68,7 +70,12 @@ class UserController extends Controller
      }
  
      function deleteUser ($user_id){
-        $user = User::where('id', $user_id)->delete(); 
-        return response()->json(null, 204);       
+        $user = User::where('id', $user_id);
+        if(!$user->exists()){
+            return response()->json(["message" => "user dosnt exist"], 404);
+        }else{
+            $user->delete(); 
+            return response()->json(null, 204);       
+        }
      } 
 }

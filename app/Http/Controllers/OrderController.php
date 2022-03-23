@@ -24,7 +24,7 @@ class OrderController extends Controller
             }
             $address = Address::where('id', $req->address_id)->where('user_id',$user);
             if(!$address->exists()) {
-                return response()->json(null, 400);
+                return response()->json(["message" => "Address not found"], 400);
             }
             $order = new Order();
             $order->user_id = $user;
